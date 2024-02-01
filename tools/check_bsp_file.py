@@ -7,8 +7,13 @@ def check_bsp_file(path):
     # print(bsp.headers)
     # TODO check if headers have PAKFILE member
     print(bsp.headers['PAKFILE'])
-    # TODO check if header length is 0
-    print(len(bsp.headers['PAKFILE'].as_bytes()))
+
+    # Check if header length is 0
+    header = bsp_tool.branches.respawn.titanfall2.LumpHeader.from_bytes(bsp.headers['PAKFILE'].as_bytes())
+    len = header.__dict__['length']
+    if len != 0:
+        print(f"BSP file \"{path}\" contains scripts, exiting.")
+        sys.exit(1)
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
